@@ -1,21 +1,45 @@
 package com.tt.jaxrs.test;
-import org.glassfish.jersey.test.JerseyTest;
 
+import org.glassfish.jersey.test.JerseyTest;
+import org.glassfish.hk2.utilities.binding.AbstractBinder;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.test.JerseyTest;
 import org.junit.Assert;
 import org.junit.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
+import com.tt.jaxrs.GreetingCard;
 import com.tt.jaxrs.OrderService;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
 
 import javax.ws.rs.core.Application;
 
+public class OrderServiceTest extends JerseyTest {
 
-public class OrderServiceTest extends JerseyTest{
+    @Mock
+    private GreetingCard greetingCard;
 
-	@Override
+    @InjectMocks
+    private OrderService orderService;
+
+    @Override
     protected Application configure() {
-        return new ResourceConfig(OrderService.class);
+        ResourceConfig config = new ResourceConfig();
+        MockitoAnnotations.initMocks(this);
+        config.register(new AbstractBinder() {
+            @Override
+            protected void configure() {
+                bind(greetingCard).to(GreetingCard.class);
+            }
+        });
+        
+        config.registerInstances(orderService);
+
+        return config;
     }
 
     @Test
@@ -26,8 +50,9 @@ public class OrderServiceTest extends JerseyTest{
 
     @Test
     public void ordersFixedPathTest() {
+        when(greetingCard.getString()).thenReturn("TEST");
         String response = target("orders/summary").request().get(String.class);
-        Assert.assertTrue("orders summarsadasdyfdg".equals(response));
+        assertThat(response).isEqualTo("TEST");
     }
-	
+
 }

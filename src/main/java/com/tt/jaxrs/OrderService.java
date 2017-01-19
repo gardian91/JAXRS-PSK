@@ -1,12 +1,16 @@
 package com.tt.jaxrs;
 
 
+import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 
 @Path("orders")
 public class OrderService {
+    
+    @Inject
+    private GreetingCard greetingCard;
 
     @GET
     @Path("{orderId}")
@@ -17,6 +21,6 @@ public class OrderService {
     @GET
     @Path("summary")
     public String getOrdersSummary() {
-        return "orders summarsadasdy";
+        return greetingCard.getString();
     }
 }
