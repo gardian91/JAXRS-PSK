@@ -40,7 +40,7 @@ public class OrderServiceTest extends JerseyTest {
                 bind(orderSummary).to(OrderSummaryService.class);
             }
         });
-        
+
         config.registerInstances(orderService);
 
         return config;
@@ -54,11 +54,17 @@ public class OrderServiceTest extends JerseyTest {
     }
     
     @Test
+    public void ordersPathParamTestResponseAsString() {
+        String order = target("orders/453").request().get(String.class);
+        assertThat(order).contains("orderId", "value");
+    }
+
+    @Test
     public void ordersPathParamTest2() {
-        Response response = target("orders/453").request().get();
+        Response response = target("orders/{orderId}").resolveTemplate("orderId", 453L).request().get();
         assertThat(response.getStatus()).isEqualTo(200);
         assertThat(response.getMediaType()).isEqualTo(MediaType.APPLICATION_JSON_TYPE);
-        
+
         Order order = response.readEntity(Order.class);
         assertThat(order.getOrderId()).isEqualTo(453L);
         assertThat(order.getValue()).isEqualTo(BigDecimal.TEN);
