@@ -17,6 +17,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 import javax.ws.rs.core.Application;
+import javax.ws.rs.core.Response;
 
 public class OrderServiceTest extends JerseyTest {
 
@@ -46,6 +47,14 @@ public class OrderServiceTest extends JerseyTest {
     public void ordersPathParamTest() {
         String response = target("orders/453").request().get(String.class);
         Assert.assertTrue("orderId: 453".equals(response));
+    }
+    
+    @Test
+    public void ordersPathParamTest2() {
+        Response response = target("orders/453").request().get();
+        assertThat(response.getStatus()).isEqualTo(200);
+        assertThat(response.getMediaType()).isEqualTo("application/json");
+        assertThat(response.readEntity(String.class)).isEqualTo("orderId: 453");
     }
 
     @Test
