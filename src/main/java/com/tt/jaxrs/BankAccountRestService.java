@@ -2,34 +2,44 @@ package com.tt.jaxrs;
 
 import java.util.List;
 
+import javax.ws.rs.Consumes;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
-import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 @Path("/accounts")
 public class BankAccountRestService {
 
-	@GET
-	@Path("/balance/{accountNumber : \\d+}")
-	public Response getAccountBalance(@PathParam("accountNumber") String accountNumber) {
 
-		return Response.status(200).entity("getAccountBalance is called " +accountNumber).build();
+	
+	
+	@POST
+	@Path("/sendemail")
+	@Produces(MediaType.TEXT_PLAIN)
+	public Response sendEmail(@FormParam("email") String email) {
+		System.out.println("receive plain text");
+		System.out.println(email);
+		return Response.ok("email=" + email).build();
+	}
 
+	@POST
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("/sendemail")
+	public Response sendJsonData(String email) {
+		System.out.println("receive json data");
+		System.out.println(email);
+		return Response.ok(email).build();
 	}
 	
-	@GET
-	@Path("/balance")
-	public Response getAllAccounts(@PathParam("accountNumber") String accountNumber) {
-		return Response.status(200).entity("getAllAccounts is called").build();
-	}
+	
 	
 	
 	@GET
