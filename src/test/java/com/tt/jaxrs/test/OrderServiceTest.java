@@ -8,9 +8,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import com.tt.jaxrs.OrderSummaryService;
-import com.tt.jaxrs.OrderService;
-import com.tt.jaxrs.OrderService.Order;
+import com.psk.bank.controllers.OrderService;
+import com.psk.bank.controllers.OrderSummaryService;
+import com.psk.bank.controllers.OrderService.Order;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;

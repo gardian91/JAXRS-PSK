@@ -1,4 +1,4 @@
-package com.tt.jaxrs;
+package com.psk.bank.controllers;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;

@@ -1,4 +1,4 @@
-package com.tt.jaxrs;
+package com.psk.bank.controllers;
 
 import javax.enterprise.context.ApplicationScoped;
 

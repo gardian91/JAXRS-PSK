@@ -1,7 +1,8 @@
-package com.tt.jaxrs;
+package com.psk.bank.controllers;
 
 import java.util.List;
 
+import javax.inject.Inject;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.FormParam;
@@ -15,9 +16,16 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-@Path("/users")
-public class UserRestService {
+import org.apache.logging.log4j.Logger;
 
+import com.psk.bank.model.Account;
+import com.psk.bank.repository.Repository;
+
+@Path("/users")
+public class AccountRestController {
+	/*private static final long serialVersionUID = 2638127270022516617L;
+	@Inject
+	private Repository<Account, String> repository;*/
 	
 	////GET,POST,PUT,DELETE
 	
