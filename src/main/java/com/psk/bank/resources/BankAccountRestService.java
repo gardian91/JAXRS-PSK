@@ -1,4 +1,4 @@
-package com.psk.bank.controllers;
+package com.psk.bank.resources;
 
 import java.util.List;
 
@@ -17,10 +17,6 @@ import javax.ws.rs.core.Response;
 
 @Path("/accounts")
 public class BankAccountRestService {
-
-
-	
-	
 	@POST
 	@Path("/sendemail")
 	@Produces(MediaType.TEXT_PLAIN)

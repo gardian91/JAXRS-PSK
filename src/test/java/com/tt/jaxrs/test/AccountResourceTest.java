@@ -8,9 +8,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import com.psk.bank.controllers.OrderService;
-import com.psk.bank.controllers.OrderSummaryService;
-import com.psk.bank.controllers.OrderService.Order;
+import com.psk.bank.repository.AccountRepository;
+import com.psk.bank.resources.AccountResource;
+import com.psk.bank.resources.AccountResource.AccountValue;
+import com.psk.bank.services.AccountService;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
@@ -22,13 +23,18 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 
-public class OrderServiceTest extends JerseyTest {
+public class AccountResourceTest extends JerseyTest {
+
+    private static final String RESOURCE_URL = "accounts";
 
     @Mock
-    private OrderSummaryService orderSummary;
+    private AccountService service;
+    
+    @Mock
+    private AccountRepository repository;
 
     @InjectMocks
-    private OrderService orderService;
+    private AccountResource resource;
 
     @Override
     protected Application configure() {
@@ -37,43 +43,44 @@ public class OrderServiceTest extends JerseyTest {
         config.register(new AbstractBinder() {
             @Override
             protected void configure() {
-                bind(orderSummary).to(OrderSummaryService.class);
+                bind(repository).to(AccountRepository.class);
+                bind(service).to(AccountService.class);
             }
         });
 
-        config.registerInstances(orderService);
+        config.registerInstances(resource);
 
         return config;
     }
 
     @Test
     public void ordersPathParamTest() {
-        Order order = target("orders/453").request().get(Order.class);
-        assertThat(order.getOrderId()).isEqualTo(453L);
+        AccountValue order = target(RESOURCE_URL+"/453").request().get(AccountValue.class);
+        assertThat(order.getAccountNum()).isEqualTo("453");
         assertThat(order.getValue()).isEqualTo(BigDecimal.TEN);
     }
     
     @Test
     public void ordersPathParamTestResponseAsString() {
-        String order = target("orders/453").request().get(String.class);
-        assertThat(order).contains("orderId", "value");
+        String order = target(RESOURCE_URL+"/453").request().get(String.class);
+        assertThat(order).contains("accountNum", "value");
     }
 
     @Test
     public void ordersPathParamTest2() {
-        Response response = target("orders/{orderId}").resolveTemplate("orderId", 453L).request().get();
+        Response response = target(RESOURCE_URL+"/{accountNum}").resolveTemplate("accountNum", "453").request().get();
         assertThat(response.getStatus()).isEqualTo(200);
         assertThat(response.getMediaType()).isEqualTo(MediaType.APPLICATION_JSON_TYPE);
 
-        Order order = response.readEntity(Order.class);
-        assertThat(order.getOrderId()).isEqualTo(453L);
+        AccountValue order = response.readEntity(AccountValue.class);
+        assertThat(order.getAccountNum()).isEqualTo("453");
         assertThat(order.getValue()).isEqualTo(BigDecimal.TEN);
     }
 
     @Test
     public void ordersFixedPathTest() {
-        when(orderSummary.getSummary()).thenReturn("TEST");
-        String response = target("orders/summary").request().get(String.class);
+        when(service.getInfo()).thenReturn("TEST");
+        String response = target(RESOURCE_URL+"/info").request().get(String.class);
         assertThat(response).isEqualTo("TEST");
     }
 

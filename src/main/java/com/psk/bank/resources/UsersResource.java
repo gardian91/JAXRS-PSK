@@ -1,4 +1,4 @@
-package com.psk.bank.controllers;
+package com.psk.bank.resources;
 
 import java.util.List;
 
@@ -18,21 +18,15 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.apache.logging.log4j.Logger;
-
-import com.psk.bank.model.Account;
-import com.psk.bank.repository.Repository;
+import com.psk.bank.repository.AccountRepository;
+import com.psk.bank.resources.dto.User;
 
 @ManagedBean
 @RequestScoped
 @Path("/users")
-public class AccountRestController {
-	/*private static final long serialVersionUID = 2638127270022516617L;
-	@Inject
-	private Repository<Account, String> repository;*/
-	
+public class UsersResource {
         @Inject
-        private OrderSummaryService orderSummaryService;
+        private AccountRepository orderSummaryService;
     
 	////GET,POST,PUT,DELETE
 	
