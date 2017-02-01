@@ -9,11 +9,13 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import com.psk.bank.repository.AccountRepository;
+import com.psk.bank.repository.TransactionRepository;
 import com.psk.bank.resources.AccountResource;
 import com.psk.bank.resources.AccountResource.AccountValue;
 import com.psk.bank.services.AccountService;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
@@ -33,6 +35,9 @@ public class AccountResourceTest extends JerseyTest {
     @Mock
     private AccountRepository repository;
 
+    @Mock
+    private TransactionRepository transactionRepository;
+
     @InjectMocks
     private AccountResource resource;
 
@@ -44,6 +49,7 @@ public class AccountResourceTest extends JerseyTest {
             @Override
             protected void configure() {
                 bind(repository).to(AccountRepository.class);
+                bind(transactionRepository).to(TransactionRepository.class);
                 bind(service).to(AccountService.class);
             }
         });
@@ -54,20 +60,22 @@ public class AccountResourceTest extends JerseyTest {
     }
 
     @Test
-    public void ordersPathParamTest() {
+    public void accountValueShouldHaveBalanceValue() {
+        when(service.getBalance(any())).thenReturn(BigDecimal.TEN);
         AccountValue order = target(RESOURCE_URL+"/453").request().get(AccountValue.class);
         assertThat(order.getAccountNum()).isEqualTo("453");
         assertThat(order.getValue()).isEqualTo(BigDecimal.TEN);
     }
     
     @Test
-    public void ordersPathParamTestResponseAsString() {
+    public void accountValueShouldHaveBalanceValueResponseAsString() {
         String order = target(RESOURCE_URL+"/453").request().get(String.class);
         assertThat(order).contains("accountNum", "value");
     }
 
     @Test
-    public void ordersPathParamTest2() {
+    public void accountValueShouldHaveBalanceValueWithTemplateParam() {
+        when(service.getBalance(any())).thenReturn(BigDecimal.TEN);
         Response response = target(RESOURCE_URL+"/{accountNum}").resolveTemplate("accountNum", "453").request().get();
         assertThat(response.getStatus()).isEqualTo(200);
         assertThat(response.getMediaType()).isEqualTo(MediaType.APPLICATION_JSON_TYPE);
@@ -78,7 +86,7 @@ public class AccountResourceTest extends JerseyTest {
     }
 
     @Test
-    public void ordersFixedPathTest() {
+    public void accountInfoShouldPassInfoText() {
         when(service.getInfo()).thenReturn("TEST");
         String response = target(RESOURCE_URL+"/info").request().get(String.class);
         assertThat(response).isEqualTo("TEST");
