@@ -143,7 +143,6 @@ public class AccountResource {
 		accountValue.setValue(BigDecimal.TEN);
 		return Response.status(200).entity(accountValue).build();
 	}
-
 	///@PathParam
 	
 	@GET
