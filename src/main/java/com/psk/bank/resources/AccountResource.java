@@ -8,6 +8,7 @@ import java.util.List;
 import javax.annotation.ManagedBean;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.FormParam;
@@ -86,17 +87,6 @@ public class AccountResource {
 		return Response.status(200).entity("POST :addAccount is called").build();
 	}
 
-	@PUT
-	@Produces(MediaType.TEXT_PLAIN)
-	public Response updateAccount() {
-		return Response.status(200).entity("PUT :updateAccount is called").build();
-	}
-
-	@DELETE
-	@Produces(MediaType.TEXT_PLAIN)
-	public Response deleteAccount() {
-		return Response.status(200).entity("DELETE :deleteAccount is called").build();
-	}
 
 	/// PATH
 
@@ -188,7 +178,6 @@ public class AccountResource {
 	}
 	
 
-	
 	//////////////
 
 
