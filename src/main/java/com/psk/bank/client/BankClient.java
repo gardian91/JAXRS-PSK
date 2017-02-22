@@ -17,7 +17,7 @@ public class BankClient {
 
     public BankClient(String url) {
         ClientConfig config = new ClientConfig();
-        config.register(JacksonJsonProvider.class);
+     //   config.register(JacksonJsonProvider.class);
         
         client = ClientBuilder.newClient(config);
         target = client.target(url);

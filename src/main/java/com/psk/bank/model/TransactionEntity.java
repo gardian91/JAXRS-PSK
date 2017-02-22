@@ -3,6 +3,10 @@ package com.psk.bank.model;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
+import com.fasterxml.jackson.databind.annotation.JsonTypeResolver;
+
 public class TransactionEntity implements Transaction {
 
     private Long id;
@@ -11,6 +15,7 @@ public class TransactionEntity implements Transaction {
     private Boolean pending;
     private LocalDateTime creationTs;
     private LocalDateTime operationTs;
+    @JsonTypeInfo(defaultImpl = AccountEntity.class, use = Id.NAME)
     private Account account;
 
     public static TransactionEntity newInstance(Long id, String dstAccountNumber, BigDecimal value, Boolean pending,

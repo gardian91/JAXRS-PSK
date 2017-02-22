@@ -1,5 +1,4 @@
 package com.psk.bank.resources;
-import javax.annotation.ManagedBean;
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
 

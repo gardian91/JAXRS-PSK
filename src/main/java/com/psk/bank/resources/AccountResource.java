@@ -36,187 +36,215 @@ import com.psk.bank.services.AccountService;
 @Produces(MediaType.APPLICATION_JSON)
 public class AccountResource {
 
-	@Inject
-	private AccountService accountService;
-	@Inject
-	private AccountRepository accountRepository;
-	@Inject
-	private TransactionRepository transactionRepository;
+    @Inject
+    private AccountService accountService;
+    @Inject
+    private AccountRepository accountRepository;
+    @Inject
+    private TransactionRepository transactionRepository;
 
-	
-	public static class AccountValue {
-		private String accountNum;
-		private BigDecimal value;
+    public static class AccountValue {
 
-		public AccountValue() {
-		}
+        @Override
+        public String toString() {
+            return String.format("AccountValue [accountNum=%s, value=%s]", accountNum, value);
+        }
 
-		public AccountValue(String accountNum, BigDecimal value) {
-			this.accountNum = accountNum;
-			this.value = value;
-		}
+        private String accountNum;
+        private BigDecimal value;
 
-		public String getAccountNum() {
-			return accountNum;
-		}
+        public AccountValue() {
+        }
 
-		public void setAccountNum(String accountNum) {
-			this.accountNum = accountNum;
-		}
+        public AccountValue(String accountNum, BigDecimal value) {
+            this.accountNum = accountNum;
+            this.value = value;
+        }
 
-		public BigDecimal getValue() {
-			return value;
-		}
+        public String getAccountNum() {
+            return accountNum;
+        }
 
-		public void setValue(BigDecimal value) {
-			this.value = value;
-		}
-	}
+        public void setAccountNum(String accountNum) {
+            this.accountNum = accountNum;
+        }
 
-	// GET,POST ...
+        public BigDecimal getValue() {
+            return value;
+        }
 
-	@GET
-	@Produces(MediaType.TEXT_PLAIN)
-	public Response getAccount() {
-		return Response.status(200).entity("GET :getAccount is called").build();
-	}
+        public void setValue(BigDecimal value) {
+            this.value = value;
+        }
 
-	@POST
-	@Produces(MediaType.TEXT_PLAIN)
-	public Response addAccount() {
-		return Response.status(200).entity("POST :addAccount is called").build();
-	}
+        @Override
+        public int hashCode() {
+            final int prime = 31;
+            int result = 1;
+            result = prime * result + ((accountNum == null) ? 0 : accountNum.hashCode());
+            result = prime * result + ((value == null) ? 0 : value.hashCode());
+            return result;
+        }
 
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj)
+                return true;
+            if (obj == null)
+                return false;
+            if (getClass() != obj.getClass())
+                return false;
+            AccountValue other = (AccountValue) obj;
+            if (accountNum == null) {
+                if (other.accountNum != null)
+                    return false;
+            } else if (!accountNum.equals(other.accountNum))
+                return false;
+            if (value == null) {
+                if (other.value != null)
+                    return false;
+            } else if (!value.equals(other.value))
+                return false;
+            return true;
+        }
+}
 
-	/// PATH
+    // GET,POST ...
 
-	@GET
-	@Path("/vip")
-	@Produces(MediaType.TEXT_PLAIN)
-	public Response getVipAccount() {
-		return Response.status(200).entity("getVipAccount is called").build();
-	}
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response getAccount() {
+        return Response.status(200).entity("GET :getAccount is called").build();
+    }
 
-	@GET
-	@Path("/vip/admin")
-	@Produces(MediaType.TEXT_PLAIN)
-	public Response getAdminAccount() {
-		return Response.status(200).entity("getAdminUser is called").build();
-	}
+    @POST
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response addAccount() {
+        return Response.status(200).entity("POST :addAccount is called").build();
+    }
 
-	///// @Produces
+    /// PATH
 
-	@GET
-	@Path("/accountsJson")
-	public Response getAccountsJson() {
-		return Response.status(200).entity(accountRepository.findAll()).build();
-	}
+    @GET
+    @Path("/vip")
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response getVipAccount() {
+        return Response.status(200).entity("getVipAccount is called").build();
+    }
 
-	@GET
-	@Path("/accountJson")
-	public Response getAccountJson() {
-		return Response.status(200).entity(accountRepository.findOne("ABC1")).build();
-	}
-	
-	@GET
-	@Path("/accountXml")
-	@Produces(MediaType.APPLICATION_XML)
-	public Response getAccountXml() {
-		return Response.status(200).entity(accountRepository.findOne("ABC1")).build();
-	}
-	
-	
-	
-	/// @PathParam
+    @GET
+    @Path("/vip/admin")
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response getAdminAccount() {
+        return Response.status(200).entity("getAdminUser is called").build();
+    }
 
-	
-	@GET
-	@Path("/getAccountByNumber/{number}")
-	public Response getAccount(@PathParam("number") String number) {
-		
-		return Response.status(200).entity(accountRepository.findOne(number)).build();
-	}
-	
+    ///// @Produces
 
-	@DELETE
-	@Path("/deleteAccountByNumber/{number}")
-	@Produces(MediaType.TEXT_PLAIN)
-	public Response deleteAccount(@PathParam("number") String number) {
-		return Response.status(200).entity("deleteAccount with number: " + number).build();
-	}
+    @GET
+    @Path("/accountsJson")
+    public Response getAccountsJson() {
+        return Response.status(200).entity(accountRepository.findAll()).build();
+    }
 
-	//// @FormParam
+    @GET
+    @Path("/accountJson")
+    public Response getAccountJson() {
+        return Response.status(200).entity(accountRepository.findOne("ABC1")).build();
+    }
 
-	@POST
-	@Path("/addAccount")
-	@Produces(MediaType.TEXT_PLAIN)
-	public Response addAccount(@FormParam("accountNumber") String accountNumber,
-			@FormParam("firstName") String firstName, @FormParam("lastName") String lastName) {
-		accountRepository.save(
-				AccountEntity.newInstance(accountNumber, firstName, lastName, true, LocalDateTime.parse("2017-01-01T21:32:00")));
-		return Response.status(200).entity("Account added successfully").build();
-	}
+    @GET
+    @Path("/accountXml")
+    @Produces(MediaType.APPLICATION_XML)
+    public Response getAccountXml() {
+        return Response.status(200).entity(accountRepository.findOne("ABC1")).build();
+    }
 
-	@PUT
-	@Path("/updateAccountWithNumber")
-	@Produces(MediaType.TEXT_PLAIN)
-	public Response updateAccountWithNumber(@FormParam("number") long number) {
-		return Response.status(200).entity("updateAccountWithNumber number: " + number).build();
-	}
+    /// @PathParam
 
-	/// @QueryParam
+    @GET
+    @Path("/getAccountByNumber/{number}")
+    public Response getAccount(@PathParam("number") String number) {
 
-	@GET
-	@Path("/filteredAccounts")
-	@Produces(MediaType.TEXT_PLAIN)
-	public Response getFilteredAccounts(@QueryParam("firstName") String firstName,
-			 @QueryParam("lastName") String lastName) {
+        return Response.status(200).entity(accountRepository.findOne(number)).build();
+    }
 
-		return Response.status(200).entity(
-				"getFilteredAccounts is called, for firstName: "+firstName+" and lastName: "+lastName)
-				.build();
-	}
-	
+    @DELETE
+    @Path("/deleteAccountByNumber/{number}")
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response deleteAccount(@PathParam("number") String number) {
+        return Response.status(200).entity("deleteAccount with number: " + number).build();
+    }
 
-	//////////////
+    //// @FormParam
 
+    @POST
+    @Path("/addAccount")
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response addAccount(@FormParam("accountNumber") String accountNumber,
+            @FormParam("firstName") String firstName, @FormParam("lastName") String lastName) {
+        accountRepository.save(AccountEntity.newInstance(accountNumber, firstName, lastName, true,
+                LocalDateTime.parse("2017-01-01T21:32:00")));
+        return Response.status(200).entity("Account added successfully").build();
+    }
 
-	@POST
-	@Path("{accountNum}/fill")
-	public Response fillTransactions(@PathParam("accountNum") String accountNum) {
-		Account account = accountRepository.findOne(accountNum);
-		if (account == null) {
-			return Response.status(404).build();
-		}
-		TransactionEntity entity = TransactionEntity.newInstance(transactionRepository.nextId(), "XCC1",
-				BigDecimal.valueOf(12L), false, LocalDateTime.now(), LocalDateTime.now(), account);
-		transactionRepository.save(entity);
-		return Response.status(201).entity(entity).build();
-	}
+    @PUT
+    @Path("/updateAccountWithNumber")
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response updateAccountWithNumber(@FormParam("number") long number) {
+        return Response.status(200).entity("updateAccountWithNumber number: " + number).build();
+    }
 
-	@GET
-	@Produces(MediaType.APPLICATION_JSON)
-	@Path("{accountNum}")
-	public AccountValue getAccountValue(@PathParam("accountNum") String accountNum) {
-		Account account = accountRepository.findOne(accountNum);
-		return new AccountValue(accountNum, accountService.getBalance(account));
-	}
-	
-	
-	@GET
-	@Path("{accountNum}/transactions")
-	public List<Transaction> getTransactions(@PathParam("accountNum") String accountNum) {
-		Account account = accountRepository.findOne(accountNum);
-		if (account == null) {
-			return Collections.emptyList();
-		}
-		return transactionRepository.findAllByAccount(account);
-	}
+    /// @QueryParam
 
-	@GET
-	@Produces(MediaType.APPLICATION_JSON)
-	@Path("info")
-	public String getInfo() {
-		return accountService.getInfo();
-	}
+    @GET
+    @Path("/filteredAccounts")
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response getFilteredAccounts(@QueryParam("firstName") String firstName,
+            @QueryParam("lastName") String lastName) {
+
+        return Response.status(200)
+                .entity("getFilteredAccounts is called, for firstName: " + firstName + " and lastName: " + lastName)
+                .build();
+    }
+
+    //////////////
+
+    @POST
+    @Path("{accountNum}/fill")
+    public Response fillTransactions(@PathParam("accountNum") String accountNum) {
+        Account account = accountRepository.findOne(accountNum);
+        if (account == null) {
+            return Response.status(404).build();
+        }
+        TransactionEntity entity = TransactionEntity.newInstance(transactionRepository.nextId(), "XCC1",
+                BigDecimal.valueOf(12L), false, LocalDateTime.now(), LocalDateTime.now(), account);
+        transactionRepository.save(entity);
+        return Response.status(201).entity(entity).build();
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("{accountNum}")
+    public AccountValue getAccountValue(@PathParam("accountNum") String accountNum) {
+        Account account = accountRepository.findOne(accountNum);
+        return new AccountValue(accountNum, accountService.getBalance(account));
+    }
+
+    @GET
+    @Path("{accountNum}/transactions")
+    public List<Transaction> getTransactions(@PathParam("accountNum") String accountNum) {
+        Account account = accountRepository.findOne(accountNum);
+        if (account == null) {
+            return Collections.emptyList();
+        }
+        return transactionRepository.findAllByAccount(account);
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("info")
+    public String getInfo() {
+        return accountService.getInfo();
+    }
 }

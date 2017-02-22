@@ -1,4 +1,4 @@
-package com.tt.jaxrs.test;
+package com.psk.bank.resources;
 
 import org.glassfish.hk2.utilities.binding.AbstractBinder;
 import org.glassfish.jersey.server.ResourceConfig;

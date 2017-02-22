@@ -8,16 +8,17 @@ import javax.ws.rs.ext.Provider;
 
 @Provider
 public class ObjectMapperContextResolver implements ContextResolver<ObjectMapper> {  
-    private final ObjectMapper MAPPER;
+    private final ObjectMapper mapper;
 
+    @SuppressWarnings("deprecation")
     public ObjectMapperContextResolver() {
-        MAPPER = new ObjectMapper();
-        MAPPER.registerModule(new JSR310Module());
-        MAPPER.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
+        mapper = new ObjectMapper();
+        mapper.registerModule(new JSR310Module());
+        mapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
     }
 
     @Override
     public ObjectMapper getContext(Class<?> type) {
-        return MAPPER;
+        return mapper;
     }  
 }
