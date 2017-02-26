@@ -77,7 +77,8 @@ public class JaxrsClientTest {
         form.param("lastName", "Kowalski");
 
         Response result = client.target("http://localhost:8080/Bank/").path("api/accounts/addAccount")
-                .resolveTemplate("id", "ABC1").request(MediaType.TEXT_PLAIN).post(Entity.form(form));
+                .request(MediaType.TEXT_PLAIN)
+                .post(Entity.form(form));
 
         String msg = result.readEntity(String.class);
         System.out.println(msg);
@@ -85,6 +86,5 @@ public class JaxrsClientTest {
         assertThat(result).isNotNull();
         assertThat(result.getStatus()).isEqualTo(200);
         assertThat(msg).isEqualTo("Account added successfully");
-
     }
 }

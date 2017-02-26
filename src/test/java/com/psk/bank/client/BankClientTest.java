@@ -59,9 +59,13 @@ public class BankClientTest {
                     .withBody(mapper.writeValueAsString(expectedVal))));
 
         AccountValue result = bank.getAccount("ABC1");
-
+        result = bank.getAccount("ABC1");
+        
         assertThat(result).isEqualsToByComparingFields(expectedVal);
 
-        verify(getRequestedFor(urlMatching("/accounts/ABC1")));
+        verify(2, getRequestedFor(urlEqualTo("/accounts/ABC1"))
+                .withRequestBody(containing("")));
+        verify(2, getRequestedFor(urlMatching("/accounts/\\w+"))
+                .withRequestBody(containing("")));
     }
 }
